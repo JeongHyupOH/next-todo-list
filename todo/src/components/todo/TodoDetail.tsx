@@ -43,7 +43,7 @@ export default function TodoDetail({ itemId }: TodoDetailProps) {
             title: data.title || "",
             done: data.done, 
             memo: data.memo || "",
-            image: data.image || null,
+            image: data.image || undefined,
           });
         } else {
           setError('Todo item not found');
