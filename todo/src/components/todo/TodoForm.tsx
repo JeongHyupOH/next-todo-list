@@ -12,10 +12,10 @@ export default function TodoForm() {
     if (!title.trim()) return;
     
     try {
-      await api.createTodo({ 
+      await api.createTodo({
         title: title.trim(),
-        completed: false,
-        memo: '',
+        content: '', 
+        done: false  
       });
       setTitle('');
       // 새로운 todo가 추가된 후 목록을 새로고침
@@ -26,7 +26,7 @@ export default function TodoForm() {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleSubmit(e);
     }

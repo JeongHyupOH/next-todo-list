@@ -49,16 +49,23 @@ export const api = {
     });
   },
 
-  createTodo: async (data: { title: string; completed: boolean; memo: string }) => {
+  createTodo: async (data: { title: string; content: string; done: boolean }) => {
     try {
       const res = await fetch(`${BASE_URL}/${TENANT_ID}/items`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          title: data.title,
+          content: data.content,
+          done: data.done
+        }),
       });
-      if (!res.ok) throw new Error('Failed to create todo');
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Failed to create todo');
+      }
       return res.json();
     } catch (error) {
       console.error('Error creating todo:', error);
