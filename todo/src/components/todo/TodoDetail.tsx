@@ -37,7 +37,7 @@ export default function TodoDetail({ itemId }: { itemId: string }) {
   useEffect(() => {
     const fetchTodo = async () => {
       try {
-        const data = await api.getTodoById(Number(itemId));
+        const data = await api.getTodoById(itemId);
         if (data) {
           setTodo(data);
         }

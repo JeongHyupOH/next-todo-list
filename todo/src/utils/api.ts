@@ -38,7 +38,7 @@ export const api = {
     }
   },
 
-  getTodoById: async (itemId: number) => {
+  getTodoById: async (itemId: string) => {  
     try {
       const res = await fetch(`${BASE_URL}/${TENANT_ID}/items/${itemId}`);
       if (!res.ok) throw new Error('Failed to fetch todo');
