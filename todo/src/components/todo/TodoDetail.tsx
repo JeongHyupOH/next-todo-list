@@ -29,7 +29,7 @@ export default function TodoDetail({ itemId }: TodoDetailProps) {
     title: "",
     done: false, 
     memo: "",
-    image: null,
+    image: undefined,
   });
 
   useEffect(() => {
