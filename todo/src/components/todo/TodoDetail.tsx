@@ -6,30 +6,25 @@ import Image from 'next/image';
 import styles from '@/styles/TodoDetail.module.css';
 import { api } from '@/utils/api';
 
-interface TodoDetailProps {
-  itemId: string;
-}
-
 interface TodoItem {
   id: string;
   title: string;
-  done: boolean;  
-  memo?: string;  
+  completed: boolean;
+  memo: string;
   image?: string | null;
 }
 
-export default function TodoDetail({ itemId }: TodoDetailProps) {
+export default function TodoDetail({ itemId }: { itemId: string }) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   const [todo, setTodo] = useState<TodoItem>({
     id: itemId,
     title: "",
-    done: false, 
+    completed: false,
     memo: "",
-    image: undefined,
+    image: null
   });
 
   useEffect(() => {
@@ -41,9 +36,9 @@ export default function TodoDetail({ itemId }: TodoDetailProps) {
           setTodo({
             id: data.id,
             title: data.title || "",
-            done: data.done, 
+            completed: data.done,
             memo: data.memo || "",
-            image: data.image || undefined,
+            image: data.image
           });
         } else {
           setError('Todo item not found');
@@ -95,17 +90,17 @@ export default function TodoDetail({ itemId }: TodoDetailProps) {
     setTodo(prev => ({ ...prev, memo: e.target.value }));
   };
 
-  const handleToggleDone = () => {
-    setTodo(prev => ({ ...prev, done: !prev.done }));  
+  const handleToggleComplete = () => {
+    setTodo(prev => ({ ...prev, completed: !prev.completed }));
   };
 
   const handleSave = async () => {
     try {
       await api.updateTodo(itemId, {
         title: todo.title,
-        done: todo.done,
+        done: todo.completed,
         memo: todo.memo,
-        image: todo.image || undefined,  
+        image: todo.image || undefined  // null을 undefined로 변환
       });
       router.push("/");
     } catch (error) {
@@ -115,8 +110,7 @@ export default function TodoDetail({ itemId }: TodoDetailProps) {
   };
 
   const handleDelete = async () => {
-    if (!confirm('정말로 삭제하시겠습니까?')) return;  
-    
+    if (!confirm('정말로 삭제하시겠습니까?')) return;
     try {
       await api.deleteTodo(itemId);
       router.push("/");
@@ -135,15 +129,16 @@ export default function TodoDetail({ itemId }: TodoDetailProps) {
         <div className={styles.titleWrapper}>
           <div 
             className={styles.checkbox} 
-            onClick={handleToggleDone}
+            onClick={handleToggleComplete}
             role="checkbox"
-            aria-checked={todo.done}
+            aria-checked={todo.completed}
           />
           <input
             type="text"
             value={todo.title}
             onChange={handleTitleChange}
             className={styles.title}
+            placeholder="제목을 입력하세요"
           />
         </div>
       </div>
