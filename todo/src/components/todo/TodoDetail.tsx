@@ -13,8 +13,8 @@ interface TodoDetailProps {
 interface TodoItem {
   id: string;
   title: string;
-  completed: boolean;
-  memo: string;
+  done: boolean;  
+  memo?: string;  
   image?: string | null;
 }
 
@@ -27,7 +27,7 @@ export default function TodoDetail({ itemId }: TodoDetailProps) {
   const [todo, setTodo] = useState<TodoItem>({
     id: itemId,
     title: "",
-    completed: false,
+    done: false, 
     memo: "",
     image: null,
   });
@@ -39,8 +39,9 @@ export default function TodoDetail({ itemId }: TodoDetailProps) {
         const data = await api.getTodoById(itemId);
         if (data) {
           setTodo({
-            ...data,
+            id: data.id,
             title: data.title || "",
+            done: data.done, 
             memo: data.memo || "",
             image: data.image || null,
           });
@@ -94,12 +95,17 @@ export default function TodoDetail({ itemId }: TodoDetailProps) {
     setTodo(prev => ({ ...prev, memo: e.target.value }));
   };
 
+  const handleToggleDone = () => {
+    setTodo(prev => ({ ...prev, done: !prev.done }));  
+  };
+
   const handleSave = async () => {
     try {
       await api.updateTodo(itemId, {
         title: todo.title,
+        done: todo.done,
         memo: todo.memo,
-        image: todo.image,
+        image: todo.image || undefined,  
       });
       router.push("/");
     } catch (error) {
@@ -109,6 +115,8 @@ export default function TodoDetail({ itemId }: TodoDetailProps) {
   };
 
   const handleDelete = async () => {
+    if (!confirm('정말로 삭제하시겠습니까?')) return;  
+    
     try {
       await api.deleteTodo(itemId);
       router.push("/");
@@ -125,7 +133,12 @@ export default function TodoDetail({ itemId }: TodoDetailProps) {
     <div className={styles.container}>
       <div className={styles.titleSection}>
         <div className={styles.titleWrapper}>
-          <div className={styles.checkbox} />
+          <div 
+            className={styles.checkbox} 
+            onClick={handleToggleDone}
+            role="checkbox"
+            aria-checked={todo.done}
+          />
           <input
             type="text"
             value={todo.title}
@@ -137,7 +150,7 @@ export default function TodoDetail({ itemId }: TodoDetailProps) {
 
       <div className={styles.content}>
         <div className={styles.imageSection} onClick={handleImageClick}>
-          {todo.image && (
+          {todo.image ? (
             <div className={styles.imageWrapper}>
               <Image
                 src={todo.image}
@@ -147,6 +160,10 @@ export default function TodoDetail({ itemId }: TodoDetailProps) {
                 style={{ objectFit: "cover" }}
                 priority
               />
+            </div>
+          ) : (
+            <div className={styles.imageUploadPlaceholder}>
+              클릭하여 이미지 업로드
             </div>
           )}
           <input
@@ -159,12 +176,12 @@ export default function TodoDetail({ itemId }: TodoDetailProps) {
         </div>
 
         <div className={styles.memoSection}>
-          <span className={styles.memoTitle}>Memo</span>
+          <span className={styles.memoTitle}>메모</span>
           <textarea
             value={todo.memo}
             onChange={handleMemoChange}
             className={styles.memoTextarea}
-            placeholder="오늘도 힘내세요!"
+            placeholder="메모를 입력하세요"
           />
         </div>
       </div>
