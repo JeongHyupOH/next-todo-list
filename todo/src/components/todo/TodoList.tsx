@@ -9,8 +9,8 @@ import { api } from "@/utils/api";
 interface TodoItem {
   id: string;
   title: string;
-  completed: boolean;
-  memo: string;
+  done: boolean;
+  memo?: string;
   image?: string | null;
 }
 
@@ -293,10 +293,13 @@ export default function TodoList() {
 
   useEffect(() => {
     const fetchTodos = async () => {
-      const data = await api.getTodos();
-      setTodos(data);
+      try {
+        const data = await api.getTodos();
+        setTodos(data);
+      } catch (error) {
+        console.error('Failed to fetch todos:', error);
+      }
     };
-
     fetchTodos();
   }, []);
 
@@ -304,7 +307,7 @@ export default function TodoList() {
     try {
       const todo = todos.find(t => t.id === id);
       if (todo) {
-        await api.updateTodo(id, { completed: !todo.completed });
+        await api.updateTodo(id, { done: !todo.done });  
         const updatedTodos = await api.getTodos();
         setTodos(updatedTodos);
       }
@@ -316,12 +319,11 @@ export default function TodoList() {
   const EmptyState = ({ type }: { type: TabType }) => {
     const mainText =
       type === "TODO" ? "할일이 없어요." : "Todo를 새롭게 추가해주세요!";
-
     const subText =
       type === "TODO"
         ? "아직 다 한 일이 없어요."
         : "해야 할 일을 체크해보세요!";
-
+ 
     return (
       <div className={styles.empty}>
         <div className={styles.emptyImage}>
@@ -334,18 +336,18 @@ export default function TodoList() {
       </div>
     );
   };
-
+ 
   return (
     <div className={styles.container}>
       <div className={styles.tabs}>
         <div className={styles.tabSection}>
           <div className={`${styles.tabHeader} ${styles.todoTab}`}>TODO</div>
           <div className={styles.list}>
-            {todos.filter((todo) => !todo.completed).length === 0 ? (
+            {todos.filter((todo) => !todo.done).length === 0 ? (  
               <EmptyState type="TODO" />
             ) : (
               todos
-                .filter((todo) => !todo.completed)
+                .filter((todo) => !todo.done)  
                 .map((todo) => (
                   <div
                     key={todo.id}
@@ -365,15 +367,14 @@ export default function TodoList() {
             )}
           </div>
         </div>
-
         <div className={styles.tabSection}>
           <div className={`${styles.tabHeader} ${styles.doneTab}`}>DONE</div>
           <div className={styles.list}>
-            {todos.filter((todo) => todo.completed).length === 0 ? (
+            {todos.filter((todo) => todo.done).length === 0 ? (  
               <EmptyState type="DONE" />
             ) : (
               todos
-                .filter((todo) => todo.completed)
+                .filter((todo) => todo.done)  
                 .map((todo) => (
                   <div
                     key={todo.id}
@@ -392,4 +393,4 @@ export default function TodoList() {
       </div>
     </div>
   );
-}
+ }
