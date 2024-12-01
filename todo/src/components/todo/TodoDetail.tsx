@@ -76,26 +76,63 @@ export default function TodoDetail({ itemId }: { itemId: string }) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.titleWrapper}>
-        <input
-          type="text"
-          value={todo.name}
-          onChange={(e) => setTodo(prev => ({ ...prev, name: e.target.value }))}
-          className={styles.title}
-        />
+      <div className={styles.titleSection}>
+        <div className={styles.titleWrapper}>
+          <div 
+            className={styles.checkbox}
+            onClick={() => setTodo(prev => ({ ...prev, isCompleted: !prev.isCompleted }))}
+            role="checkbox"
+            aria-checked={todo.isCompleted}
+          />
+          <input
+            type="text"
+            value={todo.name}
+            onChange={(e) => setTodo(prev => ({ ...prev, name: e.target.value }))}
+            className={styles.title}
+            placeholder="필수로 작성해 주세요"
+          />
+        </div>
       </div>
-
-      <div className={styles.memoSection}>
-        <textarea
-          value={todo.memo}
-          onChange={(e) => setTodo(prev => ({ ...prev, memo: e.target.value }))}
-          className={styles.memoTextarea}
-        />
+  
+      <div className={styles.content}>
+        <div className={styles.imageSection}>
+          {todo.imageUrl ? (
+            <img 
+              src={todo.imageUrl} 
+              alt="Todo image"
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          ) : (
+            <div className={styles.imageUploadPlaceholder}>
+              <span className={styles.plusIcon}>+</span>
+            </div>
+          )}
+        </div>
+  
+        <div className={styles.memoSection}>
+          <span className={styles.memoTitle}>Memo</span>
+          <textarea
+            value={todo.memo}
+            onChange={(e) => setTodo(prev => ({ ...prev, memo: e.target.value }))}
+            className={styles.memoTextarea}
+            placeholder="오늘기록을 기록해주세요"
+          />
+        </div>
       </div>
-
+  
       <div className={styles.buttonContainer}>
-        <button onClick={handleSave}>수정 완료</button>
-        <button onClick={handleDelete}>삭제하기</button>
+        <button 
+          className={`${styles.button} ${styles.saveButton}`}
+          onClick={handleSave}
+        >
+          수정 완료
+        </button>
+        <button 
+          className={`${styles.button} ${styles.deleteButton}`}
+          onClick={handleDelete}
+        >
+          삭제하기
+        </button>
       </div>
     </div>
   );
