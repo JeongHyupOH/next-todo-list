@@ -1,0 +1,192 @@
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 100px;
+ }
+ 
+ .tabs {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 32px;
+  width: 100%;
+ }
+ 
+ .tabSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+  width: 100%;
+ }
+ 
+ .tabHeader {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-family: 'HS-Regular', sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: left;
+  min-width: fit-content;
+ }
+ 
+ .todoTab {
+  background-color: #BEF264;  
+  color: #0f172a;  
+ }
+ 
+ .doneTab {
+  background-color: #166534; 
+  color: white;
+ }
+ 
+ .list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+ }
+ 
+ .item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border: 2px solid #0f172a;
+  border-radius: 24px;
+  cursor: pointer;
+  width: 100%;
+  min-height: 50px;
+  box-shadow: none;
+ }
+ 
+ 
+ .checkbox {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  border: 2px solid #0f172a;
+  border-radius: 50%;
+  position: relative;
+  background-color: #FEFCE8;
+ }
+ 
+ .checkbox.checked::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  background-color: #0f172a;
+  border-radius: 50%;
+ }
+ 
+ .text {
+  flex: 1;
+  font-size: 16px;
+  color: #1e293b; 
+ }
+
+ .completed .text {
+  text-decoration: line-through;
+}
+ 
+ .completed {
+  background-color: #EDE9FE;
+ }
+
+ .completed .checkbox {
+  display: none;
+}
+
+.doneCheckbox {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+}
+ 
+ .empty {
+  text-align: left;
+  padding: 48px 24px;
+  color: #94a3b8;  
+  width: 100%;
+ }
+ 
+ .emptyImage {
+  width: 240px;
+  height: 240px;
+  margin: 0 auto 24px;
+  display: flex;
+  justify-content: flex-start;
+ }
+
+ .emptyTextWrapper {
+  text-align: center;
+  width: 100%;
+}
+ 
+.mainText {
+  margin: 0;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.subText {
+  margin: 0;
+  color: #94a3b8;
+  font-weight: 500;
+}
+ 
+ 
+ /* 반응형 스타일 */
+ @media (max-width: 1920px) {
+  .item {
+    padding: 14px;
+  }
+
+  .emptyImage {
+    width: 240px;
+    height: 240px;
+  }
+}
+
+@media (max-width: 744px) {
+  .tabs {
+    gap: 16px;
+    flex-direction: column;
+  }
+
+  .tabHeader {
+    padding: 6px 16px;
+    font-size: 14px;
+  }
+
+  .item {
+    padding: 12px;
+  }
+
+  .emptyImage {
+    width: 240px;
+    height: 240px;
+  }
+}
+
+@media (max-width: 375px) {
+  .tabs {
+    gap: 12px;
+  }
+
+  .item {
+    padding: 10px;
+  }
+
+  .emptyImage {
+    width: 120px;
+    height: 120px;
+  }
+}
