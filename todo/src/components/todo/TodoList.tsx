@@ -11,11 +11,25 @@ interface TodoListItem {
   isCompleted: boolean;
 }
 
+
 export default function TodoList() {
   const router = useRouter();
-  const [todos, setTodos] = useState<TodoListItem[]>([]);
+  const [todos, setTodos] = useState<TodoListItem[]>([
+    {
+      id: 1,
+      name: "테스트 할일 1",
+      isCompleted: false
+    },
+    {
+      id: 2,
+      name: "테스트 할일 2",
+      isCompleted: true
+    }
+  ]);
   const [page] = useState(1);
   const [pageSize] = useState(10);
+
+  
 
   const TodoEmptySvg = () => (
     <svg
@@ -294,9 +308,10 @@ export default function TodoList() {
     const fetchTodos = async () => {
       try {
         const data = await api.getTodos(page, pageSize);
+        console.log('Fetched todos:', data); 
         setTodos(data);
       } catch (error) {
-        console.error("Failed to fetch todos:", error);
+        console.error('Failed to fetch todos:', error);
       }
     };
     fetchTodos();

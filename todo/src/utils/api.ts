@@ -29,9 +29,13 @@ interface UpdateTodoItem {
 export const api = {
   getTodos: async (page: number = 1, pageSize: number = 10) => {
     try {
+      console.log('Requesting todos:', `${BASE_URL}/${TENANT_ID}/items?page=${page}&pageSize=${pageSize}`);
       const res = await fetch(`${BASE_URL}/${TENANT_ID}/items?page=${page}&pageSize=${pageSize}`);
+      console.log('Response status:', res.status);
       if (!res.ok) throw new Error('Failed to fetch todos');
-      return res.json() as Promise<TodoListItem[]>;
+      const data = await res.json();
+      console.log('Response data:', data);
+      return data;
     } catch (error) {
       console.error('Error fetching todos:', error);
       throw error;
