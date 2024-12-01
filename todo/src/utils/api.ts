@@ -14,7 +14,7 @@ export const api = {
     try {
       const res = await fetch(`${BASE_URL}/${TENANT_ID}/items`);
       if (!res.ok) throw new Error('Failed to fetch todos');
-      return res.json() as Promise<TodoItem[]>;
+      return res.json();
     } catch (error) {
       console.error('Error fetching todos:', error);
       return [];
@@ -50,14 +50,20 @@ export const api = {
   },
 
   createTodo: async (data: { title: string; completed: boolean; memo: string }) => {
-    const res = await fetch(`${BASE_URL}/${TENANT_ID}/items`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-    return res.json() as Promise<TodoItem>;
+    try {
+      const res = await fetch(`${BASE_URL}/${TENANT_ID}/items`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error('Failed to create todo');
+      return res.json();
+    } catch (error) {
+      console.error('Error creating todo:', error);
+      throw error;
+    }
   },
 
   uploadImage: async (file: File) => {

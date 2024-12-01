@@ -12,16 +12,14 @@ export default function TodoForm() {
     if (!title.trim()) return;
     
     try {
-      // API를 통해 새로운 todo 추가
       await api.createTodo({ 
         title: title.trim(),
         completed: false,
         memo: '',
       });
-      
       setTitle('');
-      // 페이지 새로고침하여 목록 업데이트
-      router.refresh();
+      // 새로운 todo가 추가된 후 목록을 새로고침
+      window.location.reload();
     } catch (error) {
       console.error('Failed to add todo:', error);
       alert('할 일 추가에 실패했습니다.');
